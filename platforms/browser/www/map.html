@@ -1,0 +1,225 @@
+<html>
+
+<head>
+    <title>SNPPP</title>
+
+    <link rel="shortcut icon" type="image/png" href="/logo.png" />
+    <meta name="theme-color" content="#1E88E5" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/material.teal-red.min.css">
+    <script defer src="js/material.min.js"></script>
+
+    <style media="screen">
+        .footer {
+            background: #ffffff;
+            height: 18vh;
+        }
+
+        .gm-style-iw+div {
+            display: none;
+        }
+
+        .gm-style-iw {
+            text-align: center;
+        }
+
+        .mdl-layout__content {
+            background: #eeeeee;
+        }
+
+        .footer-row {
+            height: -webkit-fill-available;
+            color: black;
+        }
+
+        #message {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            background: #ffffff;
+            margin-top: 48px;
+            width: fit-content;
+            padding: 24px;
+            padding-left: 48px;
+            padding-right: 48px;
+        }
+
+        @media (min-width: 600px) {
+            .mdl-layout__header-row {
+                height: 82px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .mdl-layout__content {
+                background: #ffffff;
+            }
+            #message {
+                box-shadow: none;
+                margin-top: 0px;
+                padding: 12px;
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            h5 {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row" style="padding-left:16px;">
+                <span class="mdl-layout-spacer"></span>
+                <span class="mdl-layout-title">SNPPP</span>
+                <span class="mdl-layout-spacer"></span>
+                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                </button>
+
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
+                    <li class="mdl-menu__item" onclick="logout();">Logout</li>
+                </ul>
+            </div>
+        </header>
+
+        <main class="mdl-layout__content" id="map">
+        </main>
+
+        <header class="mdl-layout__header footer">
+            <div class="mdl-layout__header-row footer-row" style="padding-left:36px;">
+                <span style="width:-webkit-fill-available">
+                    <b>City: </b>
+                    <span id='city'>Loading...</span>
+                    <br>
+                    <br>
+                    <b>State: </b>
+                    <span id='state'>Loading...</span>
+                </span>
+                <span style="position:fixed; right:0px; margin-right:24px;">
+                    <button id='checkin' class="mdl-button mdl-js-button mdl-button--primary" disabled onclick="window.location.href='adddata.html?lat=' + myPos.coords.latitude + '&lng=' + myPos.coords.longitude + '&city=' + params.city + '&state=' + params.state">
+                        CHECK-IN
+                    </button>
+                </span>
+            </div>
+        </header>
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+    <script src = "js/jquery.js"></script>
+    <script>
+        var myPos, params = {};
+        // Note: This example requires that you consent to location sharing when
+        // prompted by your browser. If you see the error "The Geolocation service
+        // failed.", it means you probably did not give permission for the browser to
+        // locate you.
+        var config = {
+            apiKey: "AIzaSyAs_lsaD2Hn6lHUDJ-Prcoih3X_qdk1TJs",
+            authDomain: "snppp-e547e.firebaseapp.com",
+            databaseURL: "https://snppp-e547e.firebaseio.com",
+            projectId: "snppp-e547e",
+            storageBucket: "snppp-e547e.appspot.com",
+            messagingSenderId: "147325973124"
+        };
+        firebase.initializeApp(config);
+        var map, infoWindow;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 20.5937, lng: 78.9629 },
+                zoom: 3
+            });
+            infoWindow = new google.maps.InfoWindow;
+
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+
+                    myPos = position;
+
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    infoWindow.setPosition(pos);
+                    infoWindow.setOptions({ maxWidth: 200 })
+                    infoWindow.setContent("<div id='hook'><b>Your Location</b><br><span id='address'>Loading</span></div>");
+                    infoWindow.open(map);
+                    map.setCenter(pos);
+                    map.setZoom(17);
+
+                    document.getElementById('checkin').removeAttribute('disabled');
+
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        // console.log(this.responseText);
+                        if (this.readyState == 4 && this.status == 200) {
+                            var myJson = JSON.parse(this.responseText);
+                            var results = myJson.results;
+                            // console.log(results);
+                            if (results.length == 0) {
+                               // document.getElementById("address").innerHTML = "Unknown location";
+                                document.getElementById("city").innerHTML = "Unknown";
+                                document.getElementById("state").innerHTML = "Unknown";
+                            }
+                            else {
+                                document.getElementById("address").innerHTML = results[1].formatted_address;
+                                var address_components = results[1].address_components;
+                                for(key in address_components) {
+                                    console.log(address_components[key]);
+                                    var type = address_components[key].types[0];
+                                    if(type === 'locality'){
+                                        params.city = address_components[key].long_name;
+                                    }
+                                } 
+                                document.getElementById("city").innerHTML = params.city;
+                                for(key in address_components) {
+                                    //console.log(address_components[key]);
+                                    var type = address_components[key].types[0];
+                                    if(type === 'administrative_area_level_1'){
+                                        params.state = address_components[key].long_name;
+                                    }
+                                }
+                                document.getElementById("state").innerHTML = params.state;
+                            }
+                        }
+                    };
+                    xhttp.open("GET", "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + pos.lat + "," + pos.lng + "&key=AIzaSyCsP_jS76SJehLuaD7PGzQXNUDzGnm94UY", true);
+                    xhttp.send();
+
+                }, function () {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation 
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                '<div id=\'hook\'>Error: Unable to get location, please try again.</div>' :
+                '<div id=\'hook\'>Error: Unable to get location, enable permission and try again.</div>');
+            infoWindow.open(map);
+        }
+
+        function logout() {
+            firebase.auth().signOut().then(function () {
+                window.location.href = 'index.html';
+            });
+        }
+
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsP_jS76SJehLuaD7PGzQXNUDzGnm94UY&callback=initMap">
+    </script>
+</body>
+
+</html>

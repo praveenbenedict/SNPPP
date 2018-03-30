@@ -1,0 +1,366 @@
+<html>
+
+<head>
+    <title>SNPPP</title>
+
+    <link rel="shortcut icon" type="image/png" href="/logo.png" />
+    <meta name="theme-color" content="#1E88E5" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/material.teal-red.min.css">
+
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" />
+    <script defer src="js/material.min.js"></script>
+
+    <style media="screen">
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: url(https://example.com/MaterialIcons-Regular.eot);
+            /* For IE6-8 */
+            src: local('Material Icons'),
+            local('MaterialIcons-Regular'),
+            url(css/MaterialIcons-Regular.woff) format('woff');
+        }
+
+        .card {
+            margin: 16px;
+            padding: 24px;
+        }
+
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            /* Preferred icon size */
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+
+            /* Support for all WebKit browsers. */
+            -webkit-font-smoothing: antialiased;
+            /* Support for Safari and Chrome. */
+            text-rendering: optimizeLegibility;
+
+            /* Support for Firefox. */
+            -moz-osx-font-smoothing: grayscale;
+
+            /* Support for IE. */
+            font-feature-settings: 'liga';
+        }
+
+        .footer {
+            background: #ffffff;
+            height: 48px;
+        }
+
+        .mdl-layout__content {
+            background: #eeeeee;
+        }
+
+        #message {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            background: #ffffff;
+            margin-top: 48px;
+            width: fit-content;
+            padding: 24px;
+            padding-left: 48px;
+            padding-right: 48px;
+        }
+
+        @media (min-width: 600px) {
+            .mdl-layout__header-row {
+                height: 82px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .mdl-layout__content {
+                background: #ffffff;
+            }
+            #message {
+                box-shadow: none;
+                margin-top: 0px;
+                padding: 12px;
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            h5 {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row" style="padding-left:16px;">
+                <span class="mdl-layout-spacer"></span>
+                <span class="mdl-layout-title">SNPPP</span>
+                <span class="mdl-layout-spacer"></span>
+                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                </button>
+
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
+                    <li class="mdl-menu__item" onclick="logout();">Logout</li>
+                </ul>
+            </div>
+        </header>
+
+        <main class="mdl-layout__content">
+            <br>
+            <center id="loader" style="position:absolute; top:45%; width:100%">
+                <div class="preloader-wrapper small active">
+                    <div class="spinner-layer spinner-blue">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-red">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-yellow">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-green">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </center>
+            <div id="details" hidden>
+                <div id="details-holder" class="row">
+                </div>
+            </div>
+        </main>
+        <header class="mdl-layout__header footer">
+            <div class="mdl-layout__header-row footer-row" style="padding-left:36px;">
+                <span style="position:fixed; right:0px; margin-right:16px;">
+                    <button class="mdl-button mdl-js-button mdl-button--primary" onclick="submitDetails();">
+                        SUBMIT DETAILS
+                        <i class="material-icons">keyboard_arrow_right</i>
+                    </button>
+                </span>
+            </div>
+        </header>
+    </div>
+
+</body>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+
+<script src="js/firebase.js"></script>
+
+<script>
+    // Initialize Firebase
+
+    $(document).ready(function () {
+        $('select').material_select();
+    });
+
+    var config = {
+        apiKey: "AIzaSyAs_lsaD2Hn6lHUDJ-Prcoih3X_qdk1TJs",
+        authDomain: "snppp-e547e.firebaseapp.com",
+        databaseURL: "https://snppp-e547e.firebaseio.com",
+        projectId: "snppp-e547e",
+        storageBucket: "snppp-e547e.appspot.com",
+        messagingSenderId: "147325973124"
+    };
+    firebase.initializeApp(config);
+
+    var data, categories = {};
+
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            firebase.database().ref('/collectors/' + firebase.auth().currentUser.photoURL).once('value', function (snapshot) {
+                data = snapshot.val();
+                console.log(data);
+
+                document.getElementById('loader').setAttribute('hidden', 'hidden');
+                document.getElementById('details').removeAttribute('hidden');
+
+                for(var category in data){
+
+                    for(var product in data[category]){
+
+                        for(var date in data[category][product]){
+
+                            for(var id in data[category][product][date]){
+
+                                var collData = data[category][product][date][id];
+
+                                var myDate = date.substring(8,10) + '-' + date.substring(5,7) + '-' + date.substring(0,4)
+
+                                addCard('<b>Product:</b> ' + product +
+                                    '<br><b>Date:</b> ' + myDate + 
+                                    '<br><b>Quantity:</b> ' + collData.quantity +
+                                    '<br><b>Price:</b> ' + collData.price + 
+                                    '<br><b>City:</b> ' + collData.city)
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            });
+        }
+    });
+
+    firebase.database().ref('/collectors/' + firebase.auth().currentUser.photoURL).once('value', function (snapshot) {
+        data = snapshot.val();
+        console.log(data);
+
+        document.getElementById('loader').setAttribute('hidden', 'hidden');
+        document.getElementById('details').removeAttribute('hidden');
+
+
+    });
+
+    function logout() {
+        firebase.auth().signOut().then(function () {
+            window.location.href = 'index.html';
+        });
+    }
+
+    function submitDetails() {
+
+        var date = new Date();
+
+        var uploadDate = date.getFullYear() + "_" + ((date.getMonth() + 1) < 10 ? "0" : "") + (date.getMonth() + 1) + "_" + date.getDate()
+
+        var toUpload = {};
+
+        toUpload.latitude = (new URL(window.location.href)).searchParams.get('lat');
+        toUpload.longitude = (new URL(window.location.href)).searchParams.get('lng');
+
+        toUpload.city = (new URL(window.location.href)).searchParams.get('city');
+        toUpload.state = (new URL(window.location.href)).searchParams.get('state');
+
+        toUpload.email = firebase.auth().currentUser.photoURL;
+
+        toUpload.time = date.getTime()
+
+        toUpload.quantity = document.getElementById('quantity').value;
+        toUpload.price = document.getElementById('price').value;
+
+        var categoryId = document.getElementById('category').value.substring(0, 7);
+        var productId = document.getElementById('subcategory').value.substring(0, 9);
+
+        if (data.hasOwnProperty(categoryId)) {
+
+            if (data[categoryId].hasOwnProperty(productId)) {
+
+                var productDetails = data[categoryId][productId];
+
+                if ((productDetails.hasOwnProperty('Maximum quantity') && toUpload.quantity > productDetails['Maximum quantity'])
+                    || (productDetails.hasOwnProperty('Minimum quantity') && toUpload.quantity < productDetails['Minimum quantity'])) {
+
+                    alert('Quantity does not meet min/max requirement');
+
+                } else {
+
+                    firebase.database().ref('/dataCollection/' +
+                        categoryId + '/' +
+                        productId + '/' +
+                        uploadDate + '/').push(toUpload, callback);
+
+                    firebase.database().ref('/collectors/' +
+                        firebase.auth().currentUser.photoURL + '/' +
+                        categoryId + '/' +
+                        productId + '/' +
+                        uploadDate + '/').push(toUpload, callback);
+
+                }
+
+            } else {
+
+                alert('Product not found');
+
+            }
+
+        } else {
+
+            alert('Category not found');
+
+        }
+
+    }
+
+    var count = 0;
+
+    function callback(err) {
+
+        if (!err) {
+            count++;
+
+            if (count == 2) {
+
+                alert('Details added successfully');
+
+                window.location.href = 'map.html';
+            }
+
+        } else {
+
+            alert('Unable to update details. Please try again.')
+
+        }
+
+
+    }
+
+    function addCard(content) {
+        document.getElementById('details-holder').innerHTML += "<div class='col s12'><div class='card'>" + content + "</div></div>"
+    }
+
+</script>
+
+</html>

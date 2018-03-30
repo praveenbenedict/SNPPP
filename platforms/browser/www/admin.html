@@ -1,0 +1,408 @@
+<html>
+
+<head>
+    <title>SNPPP</title>
+
+    <link rel="shortcut icon" type="image/png" href="/logo.png" />
+    <meta name="theme-color" content="#1E88E5" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/material.teal-red.min.css">
+
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" />
+    <script defer src="js/material.min.js"></script>
+
+    <style media="screen">
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: url(https://example.com/MaterialIcons-Regular.eot);
+            /* For IE6-8 */
+            src: local('Material Icons'),
+            local('MaterialIcons-Regular'),
+            url(css/MaterialIcons-Regular.woff) format('woff');
+        }
+
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            /* Preferred icon size */
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+
+            /* Support for all WebKit browsers. */
+            -webkit-font-smoothing: antialiased;
+            /* Support for Safari and Chrome. */
+            text-rendering: optimizeLegibility;
+
+            /* Support for Firefox. */
+            -moz-osx-font-smoothing: grayscale;
+
+            /* Support for IE. */
+            font-feature-settings: 'liga';
+        }
+
+        .footer {
+            background: #ffffff;
+            height: 48px;
+        }
+
+        .mdl-layout__content {
+            background: #eeeeee;
+        }
+
+        #message {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            background: #ffffff;
+            margin-top: 48px;
+            width: fit-content;
+            padding: 24px;
+            padding-left: 48px;
+            padding-right: 48px;
+        }
+
+        @media (min-width: 600px) {
+            .mdl-layout__header-row {
+                height: 82px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .mdl-layout__content {
+                background: #ffffff;
+            }
+            #message {
+                box-shadow: none;
+                margin-top: 0px;
+                padding: 12px;
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            h5 {
+                font-size: 14px;
+            }
+        }
+
+        .card {
+            margin: 16px;
+            padding: 24px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row" style="padding-left:16px;">
+                <span class="mdl-layout-spacer"></span>
+                <span class="mdl-layout-title">SNPPP</span>
+                <span class="mdl-layout-spacer"></span>
+                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                </button>
+
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
+                    <li class="mdl-menu__item" onclick="logout();">Logout</li>
+                </ul>
+            </div>
+        </header>
+
+        <main class="mdl-layout__content">
+            <br>
+            <center id="loader" style="position:absolute; top:45%; width:100%">
+                <div class="preloader-wrapper small active">
+                    <div class="spinner-layer spinner-blue">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-red">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-yellow">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-green">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </center>
+            <div id="content" hidden>
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="input-field col s12">
+                                    <input type="text" id="category" class="autocomplete">
+                                    <label for="autocomplete-input">Enter Category</label>
+                                </div>
+                            </div>
+                            <div class="col s12">
+                                <div class="input-field col s12">
+                                    <input type="text" id="subcategory" disabled class="autocomplete">
+                                    <label for="autocomplete-input">Enter Sub-category</label>
+                                </div>
+                            </div>
+                            <div class="col s12">
+                                <div class="input-field col s12">
+                                    <input type="text" id="district" class="autocomplete">
+                                    <label for="district">District</label>
+                                </div>
+                            </div>
+                            <div class="col s12">
+                                <div class="input-field col s4">
+                                    <input id="year" type="number" class="validate">
+                                    <label for="year">Year</label>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input id="month" type="number" class="validate">
+                                    <label for="month">Month</label>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input id="date" type="number" class="validate">
+                                    <label for="date">Date</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="details" hidden>
+                <div id="details-holder" class="row">
+                </div>
+            </div>
+        </main>
+        <header class="mdl-layout__header footer">
+            <div class="mdl-layout__header-row footer-row" style="padding-left:36px;">
+                <span style="position:fixed; right:0px; margin-right:16px;">
+                    <button id='get-btn' class="mdl-button mdl-js-button mdl-button--primary" disabled onclick="getDetails();">
+                        GET DETAILS
+                    </button>
+                </span>
+            </div>
+        </header>
+    </div>
+
+</body>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<script src="js/firebase.js"></script>
+
+
+<script>
+    // Initialize Firebase
+    $(document).ready(function () {
+        $('select').material_select();
+    });
+
+    var config = {
+        apiKey: "AIzaSyAs_lsaD2Hn6lHUDJ-Prcoih3X_qdk1TJs",
+        authDomain: "snppp-e547e.firebaseapp.com",
+        databaseURL: "https://snppp-e547e.firebaseio.com",
+        projectId: "snppp-e547e",
+        storageBucket: "snppp-e547e.appspot.com",
+        messagingSenderId: "147325973124"
+    };
+    firebase.initializeApp(config);
+
+</script>
+
+<script src="js/yearwise.js"></script>
+<script src="js/monthwise.js"></script>
+<script src="js/datewise.js"></script>
+<script src="js/districtwise.js"></script>
+
+<script>
+
+    var data, categories = {};
+
+    firebase.database().ref('/dataCollection').once('value', function (snapshot) {
+        data = snapshot.val();
+        console.log(data);
+
+        document.getElementById('loader').setAttribute('hidden', 'hidden');
+        document.getElementById('content').removeAttribute('hidden');
+        document.getElementById('get-btn').removeAttribute('disabled');
+
+        for (var key in data) {
+            categories[key + " - " + data[key]['BHName']] = null;
+        }
+
+        $('#category').autocomplete({
+            data: categories,
+            limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+            onAutocomplete: function (val) {
+                // Callback function when value is autcompleted.
+                category = val.substring(0, 7);
+                var subitems = {}
+                var subcategories = data[val.substring(0, 7)];
+
+                for (var key in subcategories) {
+                    if (key != 'BHName') {
+                        subitems[key + " - " + subcategories[key]['ItemName']] = null;
+                    }
+                }
+
+                console.log(subcategories);
+
+                $('#subcategory').removeAttr('disabled');
+
+                document.getElementById('subcategory').value = "";
+
+                $('#subcategory').autocomplete({
+                    data: subitems,
+                    limit: 20,
+                    onAutocomplete: function (subc) {
+
+
+                    },
+                    minLength: 0,
+                });
+            },
+
+            minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+        });
+
+
+    });
+
+    function logout() {
+        firebase.auth().signOut().then(function () {
+            window.location.href = 'index.html';
+        });
+    }
+
+    function addCard(content, className) {
+        var keys = [];
+        var pairs = [];
+        console.log(content);
+        var time = new Date(content.time);
+        document.getElementById('details-holder').innerHTML += `<div class='col s12'><div class='card'>City : ${content.city} <br/>
+                                                                    Price : ${content.price}<br/>
+                                                                    Quantity : ${content.quantity}<br/>
+                                                                    Time: ${time.toLocaleDateString()}<br>
+                                                                    State : ${content.state}<br/>
+                                                                    Latitude : ${content.latitude} <br/>
+                                                                    Longitude : ${content.longitude} <br/>
+
+                                                                    </div></div>`;
+
+    }
+
+    function getDetails() {
+
+        if (document.getElementById('content').hasAttribute('hidden')) {
+
+            document.getElementById('get-btn').innerHTML = "Get details";
+
+            document.getElementById('content').removeAttribute('hidden');
+            document.getElementById('details').setAttribute('hidden', 'hidden');
+            document.getElementById('loader').setAttribute('hidden','hidden');
+
+            document.getElementById('details-holder').innerHTML = "";
+
+        } else {
+
+            console.log('hello');
+
+            document.getElementById('get-btn').innerHTML = "Go Back";
+            
+            var subcategory = document.getElementById('subcategory').value.substring(0,9);
+            
+            if(document.getElementById('year').value != ""){
+
+                if(document.getElementById('month').value != "") {
+
+                    if(document.getElementById('date').value != ""){
+                        //If we have year, month and date
+                        console.log('date');
+                        getDataDateWise(subcategory, document.getElementById('date').value,
+                            document.getElementById('month').value, document.getElementById('year').value);
+
+                    } else {
+                        //If we have just year nad month
+                        getDataMonthWise(subcategory, document.getElementById('month').value,
+                            document.getElementById('year').value);
+
+                    }
+
+                } else {
+                    //If we have only year
+
+                    getDataYearWise(subcategory, document.getElementById('year').value);
+
+                }
+
+            } else {
+                if(document.getElementById('district').value != null){
+                    allDistrictData(document.getElementById('district').value);
+                }
+                else{
+                    alert('Enter atleast an year');
+                }
+            }
+
+            document.getElementById('loader').removeAttribute('hidden');
+            document.getElementById('content').setAttribute('hidden', 'hidden');
+        }
+    }
+
+    function dataController(data){
+        document.getElementById('loader').setAttribute('hidden','hidden');
+        document.getElementById('details').removeAttribute('hidden');
+        console.log(data);
+        for(var key in data){
+            addCard(data[key], key);
+        }
+    }
+
+</script>
+
+</html>
