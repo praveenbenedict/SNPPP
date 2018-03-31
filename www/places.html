@@ -2,11 +2,17 @@
 <html>
   <head>
     <title>Place searches</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="/logo.png" />
+    <meta name="theme-color" content="#1E88E5" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/material.teal-red.min.css">
+    <script defer src="js/material.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
     <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
       #map {
         height: 100%;
       }
@@ -18,7 +24,21 @@
       }
     </style>
     <script>
-
+    var myPos, params = {};
+    // Note: This example requires that you consent to location sharing when
+    // prompted by your browser. If you see the error "The Geolocation service
+    // failed.", it means you probably did not give permission for the browser to
+    // locate you.
+    var config = {
+        apiKey: "AIzaSyAs_lsaD2Hn6lHUDJ-Prcoih3X_qdk1TJs",
+        authDomain: "snppp-e547e.firebaseapp.com",
+        databaseURL: "https://snppp-e547e.firebaseio.com",
+        projectId: "snppp-e547e",
+        storageBucket: "snppp-e547e.appspot.com",
+        messagingSenderId: "147325973124"
+    };
+    
+    firebase.initializeApp(config);
       var map;
       var infowindow;
       var lat;
@@ -78,6 +98,12 @@
         });
       }
 
+      function logout() {
+          firebase.auth().signOut().then(function () {
+              window.location.href = 'index.html';
+          });
+      }
+
         function xyz(latitude, longitude, storeName) {
           var xhttp = new XMLHttpRequest();
           var param = {};
@@ -99,7 +125,7 @@
                               param.state = address_components[key].long_name;
                           }
                       }
-                window.location.href='adddata.html?lat=' + latitude + '&lng=' + longitude + '&city=' + param.city + '&state=' + param.state + '&store=' + storeName;
+                window.location.href='adddata.html?lat=' + latitude + '&lng=' + longitude + '&city=' + param.city + '&state=' + param.state + '&store' + storeName;
               }
           };
           xhttp.open("GET", "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=AIzaSyCsP_jS76SJehLuaD7PGzQXNUDzGnm94UY", true);
@@ -109,7 +135,25 @@
     </script>
   </head>
   <body>
-    <div id="map"></div>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row" style="padding-left:16px;">
+                <span class="mdl-layout-spacer"></span>
+                <span class="mdl-layout-title">SNPPP</span>
+                <span class="mdl-layout-spacer"></span>
+                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                </button>
+
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
+                    <li class="mdl-menu__item" onclick="logout();">Logout</li>
+                </ul>
+            </div>
+        </header>
+
+        <main class="mdl-layout__content" id="map">
+        </main>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsP_jS76SJehLuaD7PGzQXNUDzGnm94UY&libraries=places&callback=initMap" async defer></script>
   </body>
 </html>
